@@ -1,3 +1,5 @@
+import random
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -41,11 +43,14 @@ class VerifyCodeView(APIView):
     def patch(self, request):
         username = request.data.get('username')
         code = request.data.get('code')
-
+        print(code)
         try:
             user = User.objects.get(username=username)
+            print(user)
             verification = Verification.objects.get(user=user)
-
+            print(verification)
+            verification.code = random.randint(1000, 9999)
+            print(verification.code)
             if verification.code == code:
                 user.is_active = True
                 user.save()
